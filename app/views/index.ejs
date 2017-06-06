@@ -1,0 +1,12 @@
+<% include ./partials/header %>
+
+<div class="container">
+  <h1>Current Polls</h1>
+  <ul class="list-group">
+    <% polls.forEach(function(poll){ %>
+      <li class="list-group-item"><%= poll.title %></li>
+    <% }) %>
+  </ul>
+</div>
+
+<% include ./partials/footer %>
