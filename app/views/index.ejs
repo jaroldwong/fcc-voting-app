@@ -4,7 +4,7 @@
   <h1>Current Polls</h1>
   <ul class="list-group">
     <% polls.forEach(function(poll){ %>
-      <a href=<%= poll._id %>>
+      <a href="polls/<%= poll._id %>">
         <li class="list-group-item"><%= poll.title %></li>
       </a>
     <% }) %>

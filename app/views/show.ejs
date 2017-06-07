@@ -1,12 +1,18 @@
 <% include ./partials/header %>
 
 <div class="container">
-  <p><%= poll.title %><p>
-  <p>Created by: <%= poll.user %></p>
-
-  <% poll.options.forEach(function(option) { %>
-    <p><%= option.content %> ... <%= option.votes %></p>
-  <% }) %>
+  <p><strong><%= poll.title %></strong> <span class="text-muted">by <%= poll.user %></span></p>
+  <ul class="list-unstyled">
+    <% poll.options.forEach(function(option, index) { %>
+      <li class="votes">
+        <%= option.content %>
+        ...
+        <span class="badge badge-default"><%= option.votes %></span>
+        ...
+        <button class="upvote btn btn-sm" value="<%= index %>">+</button>
+      </li>
+    <% }) %>
+  </ul>
 </div>
 
 <% include ./partials/footer %>
