@@ -1,7 +1,6 @@
 <% include ./partials/header %>
 
 <div class="container">
-  <h1>Current Polls</h1>
   <ul class="list-group">
     <% polls.forEach(function(poll){ %>
       <a href="polls/<%= poll._id %>">

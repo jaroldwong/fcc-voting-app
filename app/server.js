@@ -12,7 +12,7 @@ mongoose.connect('mongodb://localhost:27017/votingapp');
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 app.set('views', path.join(__dirname, '/views'));
@@ -22,27 +22,50 @@ seedDB();
 
 app.get('/', (req, res) => {
   Poll.find({}).then(
-    polls => {
+    (polls) => {
       res.render('index', {polls: polls});
     });
+});
+
+app.get('/polls/new', (req, res) => {
+  res.render('new');
 });
 
 app.get('/polls/:id', (req, res) => {
   const id = req.params.id;
 
   Poll.findById(id, (err, poll) => {
-    res.render('show', { poll: poll });
+    res.render('show', {poll: poll});
   });
 });
 
 app.post('/polls', (req, res) => {
-  // create
+  const title = req.body.title;
+  const options = req.body.options.split(',').map((option) => {
+    return option.trim();
+  });
+
+  const pollOptions = options.map((opt) => {
+    return {content: opt, votes: 0};
+  });
+
+  Poll.create({
+    user: 'anon',
+    title: title,
+    options: pollOptions,
+  }, (err, poll) => {
+    if (err) {
+      console.error(err);
+    }
+
+    res.redirect('/');
+  });
 });
 
 app.post('/polls/:id', (req, res) => {
   const id = req.params.id;
 
-  if(req.body.option) {
+  if (req.body.option) {
     const option = req.body.option;
 
     Poll.findById(id, (err, poll) => {
@@ -57,7 +80,7 @@ app.post('/polls/:id', (req, res) => {
     });
   }
 
-  if(req.body.content) {
+  if (req.body.content) {
     const content = req.body.content;
 
     Poll.findById(id, (err, poll) => {
@@ -65,11 +88,11 @@ app.post('/polls/:id', (req, res) => {
         console.error(err);
       }
 
-      poll.options.push({ content: content, votes: 0 });
+      poll.options.push({content: content, votes: 0});
       poll.save(() => {
         res.redirect('/polls/' + id);
       });
-    })
+    });
   }
 });
 
