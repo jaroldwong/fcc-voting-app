@@ -20,25 +20,20 @@ app.set('view engine', 'ejs');
 
 seedDB();
 
-app.get('/', (req, res) => {
+// Polls Index
+app.get('/polls', (req, res) => {
   Poll.find({}).then(
     (polls) => {
       res.render('index', {polls: polls});
     });
 });
 
+// New Polls
 app.get('/polls/new', (req, res) => {
   res.render('new');
 });
 
-app.get('/polls/:id', (req, res) => {
-  const id = req.params.id;
-
-  Poll.findById(id, (err, poll) => {
-    res.render('show', {poll: poll});
-  });
-});
-
+// Create Poll
 app.post('/polls', (req, res) => {
   const title = req.body.title;
   const options = req.body.options.split(',').map((option) => {
@@ -62,6 +57,16 @@ app.post('/polls', (req, res) => {
   });
 });
 
+// Show Poll
+app.get('/polls/:id', (req, res) => {
+  const id = req.params.id;
+
+  Poll.findById(id, (err, poll) => {
+    res.render('show', {poll: poll});
+  });
+});
+
+// Update Poll
 app.post('/polls/:id', (req, res) => {
   const id = req.params.id;
 
@@ -96,8 +101,21 @@ app.post('/polls/:id', (req, res) => {
   }
 });
 
+// Destroy Poll
 app.delete('/polls/:id', (req, res) => {
-  // delete
+  console.log('hit delete');
+  Poll.findById(req.params.id, (err, poll) => {
+    if (err) {
+      console.error(err);
+    } else {
+      poll.remove();
+      res.redirect('/polls');
+    }
+  });
+});
+
+app.get('/', (req, res) => {
+  res.redirect('/polls');
 });
 
 module.exports = app;

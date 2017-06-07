@@ -19,3 +19,17 @@ Array.prototype.forEach.call(upvotes, function(element) {
       });
   });
 });
+
+const deleteBtn = document.getElementById('delete');
+if (deleteBtn) {
+  deleteBtn.addEventListener('click', function(event) {
+    fetch(event.target.baseURI, {
+      method: 'delete',
+      body: JSON.stringify({id: event.target.baseURI.split('/').pop()}),
+    })
+      .then(location.replace('/polls'))
+      .catch(function(err) {
+        console.error(err);
+      });
+  });
+}
