@@ -4,7 +4,9 @@
   <h1>Current Polls</h1>
   <ul class="list-group">
     <% polls.forEach(function(poll){ %>
-      <li class="list-group-item"><%= poll.title %></li>
+      <a href=<%= poll._id %>>
+        <li class="list-group-item"><%= poll.title %></li>
+      </a>
     <% }) %>
   </ul>
 </div>

@@ -18,8 +18,15 @@ app.get('/', (req, res) => {
   Poll.find({}).then(
     polls => {
       res.render('index', {polls: polls});
-    }
-  )
+    });
+});
+
+app.get('/:id', (req, res) => {
+  const id = req.params.id;
+
+  Poll.findById(id, (err, poll) => {
+    res.render('show', { poll: poll });
+  });
 });
 
 app.post('/polls', (req, res) => {

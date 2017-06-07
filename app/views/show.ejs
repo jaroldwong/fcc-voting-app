@@ -1,0 +1,12 @@
+<% include ./partials/header %>
+
+<div class="container">
+  <p><%= poll.title %><p>
+  <p>Created by: <%= poll.user %></p>
+
+  <% poll.options.forEach(function(option) { %>
+    <p><%= option.content %> ... <%= option.votes %></p>
+  <% }) %>
+</div>
+
+<% include ./partials/footer %>
