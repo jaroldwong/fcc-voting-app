@@ -40,19 +40,37 @@ app.post('/polls', (req, res) => {
 });
 
 app.post('/polls/:id', (req, res) => {
-  const id = req.body.id;
-  const option = req.body.option;
+  const id = req.params.id;
 
-  Poll.findById(id, (err, poll) => {
-    if (err) {
-      console.error(err);
-    }
+  if(req.body.option) {
+    const option = req.body.option;
 
-    poll.options[option].votes += 1;
-    poll.save((err, data) => {
-      console.log('successful update');
+    Poll.findById(id, (err, poll) => {
+      if (err) {
+        console.error(err);
+      }
+
+      poll.options[option].votes += 1;
+      poll.save((err, data) => {
+        console.log('successful update');
+      });
     });
-  });
+  }
+
+  if(req.body.content) {
+    const content = req.body.content;
+
+    Poll.findById(id, (err, poll) => {
+      if (err) {
+        console.error(err);
+      }
+
+      poll.options.push({ content: content, votes: 0 });
+      poll.save(() => {
+        res.redirect('/polls/' + id);
+      });
+    })
+  }
 });
 
 app.delete('/polls/:id', (req, res) => {

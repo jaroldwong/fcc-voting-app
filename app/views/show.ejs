@@ -1,7 +1,8 @@
 <% include ./partials/header %>
 
 <div class="container">
-  <p><strong><%= poll.title %></strong> <span class="text-muted">by <%= poll.user %></span></p>
+  <h1><%= poll.title %></h1>
+  <p class="text-muted">by <%= poll.user %></p>
   <ul class="list-unstyled">
     <% poll.options.forEach(function(option, index) { %>
       <li class="votes">
@@ -9,10 +10,16 @@
         ...
         <span class="badge badge-default"><%= option.votes %></span>
         ...
-        <button class="upvote btn btn-sm" value="<%= index %>">+</button>
+        <button class="upvote btn btn-xs" value="<%= index %>">+</button>
       </li>
     <% }) %>
   </ul>
+
+  <form action="/polls/<%= poll.id %>" method="post">
+    <label>New option</label>
+    <input type="text" placeholder="Vote Me!" name="content">
+    <input type="submit" value="Add">
+  </form>
 </div>
 
 <% include ./partials/footer %>
