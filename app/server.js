@@ -6,6 +6,8 @@ const session = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
+require('dotenv').config({path: './.env'});
+
 const User = require('./models/user');
 const Poll = require('./models/poll');
 const app = express();
@@ -20,7 +22,7 @@ app.use(bodyParser.json());
 
 // PASSPORT CONFIG
 app.use(session({
-  secret: 'keyboard cat',
+  secret: process.env.SECRET,
   resave: false,
   saveUninitialized: false,
 }));
@@ -65,15 +67,20 @@ app.post('/polls', (req, res) => {
   });
 
   Poll.create({
-    user: 'anon',
+    user: req.user.username,
     title: title,
     options: pollOptions,
-  }, (err, poll) => {
+  }, (err, newPoll) => {
     if (err) {
       console.error(err);
     }
 
-    res.redirect('/');
+    User.findById(req.user.id, (err, user) => {
+      user.polls.push(newPoll);
+      user.save().then(
+        res.redirect('/')
+      );
+    });
   });
 });
 
@@ -131,6 +138,13 @@ app.delete('/polls/:id', (req, res) => {
       res.redirect('/polls');
     }
   });
+});
+
+app.get('/users/:name', (req, res) => {
+  User.findById(req.user.id).populate('polls')
+    .then((user) => {
+      res.render('profile', {polls: user.polls});
+    });
 });
 
 // AUTH ROUTES
