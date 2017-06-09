@@ -3,16 +3,16 @@ const mongoose = require('mongoose');
 const PollSchema = new mongoose.Schema({
   user: {
     type: String,
-    require: true
+    require: true,
   },
   title: {
     type: String,
-    require: true
+    require: true,
   },
   options: [{
     content: String,
-    votes: { type: Number, default: 0 },
-    _id: false
+    votes: {type: Number, default: 0},
+    _id: false,
   }],
 });
 

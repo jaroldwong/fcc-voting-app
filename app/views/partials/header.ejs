@@ -14,5 +14,14 @@
         <ul class="nav navbar-nav">
           <li><a href="/polls/new">New Poll</a></li>
         </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <% if(!currentUser){ %>
+            <li><a href="/signup">Sign Up</a></li>
+            <li><a href="/login">Login</a></li>
+          <% } else { %>
+            <li><a href="#">Welcome, <%= currentUser.username %></a></li>
+            <li><a href="/logout">Logout</a><li>
+          <% } %>
+        </ul>
       </div>
     </nav>

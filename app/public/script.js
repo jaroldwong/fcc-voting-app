@@ -25,7 +25,6 @@ if (deleteBtn) {
   deleteBtn.addEventListener('click', function(event) {
     fetch(event.target.baseURI, {
       method: 'delete',
-      body: JSON.stringify({id: event.target.baseURI.split('/').pop()}),
     })
       .then(location.replace('/polls'))
       .catch(function(err) {
