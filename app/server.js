@@ -14,7 +14,7 @@ const app = express();
 const seedDB = require('./seed');
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/votingapp');
+mongoose.connect(process.env.MONGOURI);
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({extended: false}));
@@ -40,7 +40,7 @@ app.use((req, res, next) => {
 app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'ejs');
 
-seedDB();
+// seedDB();
 
 // Polls Index
 app.get('/polls', (req, res) => {
@@ -176,7 +176,7 @@ app.post('/login', passport.authenticate('local',
     failureRedirect: '/login',
   }), (req, res) => {});
 
-app.get('logout', (req, res) => {
+app.get('/logout', (req, res) => {
   req.logout();
   res.redirect('/polls');
 });
