@@ -1,31 +1,78 @@
 <% include ./partials/header %>
 
 <div class="container">
-  <h1><%= poll.title %></h1>
-  <p class="text-muted">by <%= poll.user %></p>
-  <ul class="list-unstyled">
-    <% poll.options.forEach(function(option, index) { %>
-      <li class="votes">
-        <%= option.content %>
-        ...
-        <span class="badge badge-default"><%= option.votes %></span>
-        ...
-        <button class="upvote btn btn-xs" value="<%= index %>">+</button>
-      </li>
-    <% }) %>
-  </ul>
+  <div class="row">
+    <div class="col-md-3 col-md-offset-1">
+      <h1><%= poll.title %></h1>
+      <p class="text-muted">by <%= poll.user %></p>
+      <ul class="list-unstyled">
+        <% poll.options.forEach(function(option, index) { %>
+          <li class="votes">
+            <%= option.content %>
+            ...
+            <span class="badge badge-default"><%= option.votes %></span>
+            ...
+            <button class="upvote btn btn-xs" value="<%= index %>">+</button>
+          </li>
+        <% }) %>
+      </ul>
 
-  <% if (currentUser) { %>
-    <form action="/polls/<%= poll.id %>" method="post">
-      <label>New option</label>
-      <input type="text" placeholder="Vote Me!" name="content">
-      <input type="submit" value="Add">
-    </form>
+      <% if (currentUser) { %>
+        <form action="/polls/<%= poll.id %>" method="post">
+          <label>New option</label>
+          <input type="text" placeholder="Vote Me!" name="content">
+          <input type="submit" value="Add">
+        </form>
 
-    <% if (poll.user === currentUser.username) { %>
-      <button id="delete" class="btn btn-danger">Delete Poll</button>
-    <% } %>
-  <% } %>
+        <% if (poll.user === currentUser.username) { %>
+          <button id="delete" class="btn btn-danger">Delete Poll</button>
+        <% } %>
+      <% } %>
+    </div>
+    <div class="col-md-7 col-md-offset-1">
+      <canvas id="myChart" width="400" height="400"></canvas>
+    </div>
+  </div>
 </div>
+
+<script>
+var ctx = document.getElementById("myChart");
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: <%- JSON.stringify(pollOptions) %>,
+        datasets: [{
+            label: '# of Votes',
+            data: <%- JSON.stringify(pollOptionVotes) %>,
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+</script>
 
 <% include ./partials/footer %>
