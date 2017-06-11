@@ -89,12 +89,14 @@ app.get('/polls/:id', (req, res) => {
   const id = req.params.id;
 
   Poll.findById(id, (err, poll) => {
-    const pollOptions = poll.options.map((option) => {return option.content});
-    console.log(pollOptions);
+    const options = poll.options.map((option) => {
+      return option.content;
+    });
+    const votes = poll.options.map((option) => {
+      return option.votes;
+    });
 
-    const pollOptionVotes = poll.options.map((option) => {return option.votes});
-    console.log(pollOptionVotes);
-    res.render('show', {poll: poll, pollOptions: pollOptions, pollOptionVotes: pollOptionVotes});
+    res.render('show', {poll: poll, options: options, votes: votes});
   });
 });
 

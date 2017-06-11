@@ -17,6 +17,8 @@
         <% }) %>
       </ul>
 
+      <a href="https://twitter.com/share" class="twitter-share-button" data-text="Vote on <%= poll.title %> @ " data-show-count="false">Tweet</a><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
       <% if (currentUser) { %>
         <form action="/polls/<%= poll.id %>" method="post">
           <label>New option</label>
@@ -40,10 +42,10 @@ var ctx = document.getElementById("myChart");
 var myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: <%- JSON.stringify(pollOptions) %>,
+        labels: <%- JSON.stringify(options) %>,
         datasets: [{
             label: '# of Votes',
-            data: <%- JSON.stringify(pollOptionVotes) %>,
+            data: <%- JSON.stringify(votes) %>,
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
@@ -67,6 +69,7 @@ var myChart = new Chart(ctx, {
         scales: {
             yAxes: [{
                 ticks: {
+                    stepSize: 1,
                     beginAtZero:true
                 }
             }]
